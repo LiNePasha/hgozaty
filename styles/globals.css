@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@font-face {
+    font-family: 'Readex Pro';
+    src: url('./Readex_Pro/static/ReadexPro-Light.ttf');
+    src: url('./Readex_Pro/static/ReadexPro-Medium.ttf');
+    font-weight: 600;
+    font-style: normal;
+    }
+
+@layer base {
+    body {
+        font-family: 'Readex Pro', sans-serif;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    table {
+        width: 100%;
+        margin-top: 10px;
+    }
+    tbody {
+        border-spacing: 0;
+        border-collapse: collapse;
+    }
+    h2.sectionTitle::before {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 120px;
+        height: 4px;
+        background: #f10025;
+        bottom: -14px;
+        left: calc(50% - 60px);
+    }
+    h2.sectionTitle::after {
+        content: "";
+        position: absolute;
+        display: block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #f10025;
+        bottom: -16px;
+        left: calc(50% - 5px);
+    }
+    table tr {
+        margin-bottom: 10px;
+        border: 1px solid #f1f1f1;
+    }
+    tbody tr:nth-child(even) {
+        background: #fbfbfb;
+    }
+    table td {
+        padding: 10px;
+    }
+}
+
+@layer components {
+    .rtl {
+        direction: rtl;
+    }
+    .flexCenter {
+        @apply flex items-center justify-center
+    }
+    .hgozaty-header {
+        @apply flexCenter w-full h-[80px] rtl
+    }
+    .headerLink {
+        @apply text-xl cursor-pointer opacity-75 transition hover:text-[#f10025] hover:opacity-100;
+    }
+    .headerIcon {
+        @apply h-6 w-6 cursor-pointer opacity-75 transition hover:text-[#f10025] hover:opacity-100;
+        font-size: 5rem;
+    }
+    .heightCalc {
+        height: calc(80vh - 3rem);
+    }
+    .productShadow {
+        box-shadow: 0 0 15px #b7b7b785;
+        border-bottom: 3px solid #f10025;
+    }
+    .sidepar {
+        border: 1px solid #f1f1f1;
+        box-shadow: 0 0 20px #cccccc57;
+        margin-bottom: 30px;
+        padding: 15px;
+    }
+    .inherit {
+        display: inherit;
+    }
+    .tost {
+        background: rgba(255,255,255,.4);
+        border-top: 1px solid #e0dcd6;
+    }
+    .detailsShadow {
+        box-shadow: 0 10px 31px 0 rgba(255, 44, 7, 0.068);
+    }
+    .slide {
+        transition-duration: 1s ease;
+    }
+    .slide.active {
+        opacity: 0.7;
+        transition-duration: 1s;
+        transform: scale(1.8);
+    }
+    /* Work With Responsive */
+    .container {
+        @apply w-[750px] xl:w-[1170px] md:w-[970px] sm:w-[750px]
+    }
+    .row {
+        @apply flex flex-col xl:flex-row lg:flex-row md:flex-row sm:flex-col;
+        margin-right: -15px;
+        margin-left: -15px;
+    }
+    .col-md-4 {
+        @apply w-[100%] lg:w-[33.33333333%] p-8 xl:w-[33.33333333%] sm:w-[100%];
+        text-align: center ;
+    }
+    .col-md-4 h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    @media screen and (min-width: 1200px) {
+        .responsiveFlex {
+            flex-direction: row !important;
+            align-items: flex-start !important;
+        }
+        .responsiveSticky {
+            position: sticky;
+            top: 10%;
+        }
+        .rfv {
+            width: 70rem !important;
+        }
+    }
+}
+
+
+

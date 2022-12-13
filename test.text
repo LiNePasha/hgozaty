@@ -1,0 +1,190 @@
+// slug js
+import { GetServerSideProps } from "next";
+import { useEffect, useState } from "react";
+import { fetchProducts } from "../../utils/fetchProducts";
+
+// interface Props {
+//     products: Product[];
+//   }
+
+export default function productScreen(products) {
+    // const { slug } = products;
+    
+    return (
+        <div>
+            {console.log(products.res)}
+            {  
+                products.products.map((pe, i) => {
+                    return (
+                        <div key={i}>
+                            {pe.title}
+                        </div>
+                    )
+                })
+            }
+        </div>
+    )
+}
+
+
+{/* <div>
+                {console.log(products.products)}
+            </div> */}
+
+
+// Backend Code
+export const getServerSideProps = async (context) => {
+    const products = await fetchProducts();
+    
+    const res = context.params.slug
+    return{
+      props: {
+        products: products,
+        res: res
+      },
+    }
+  }
+
+// slug tsx with error ssg and ssr
+import { GetServerSideProps } from "next";
+import { useEffect, useState } from "react";
+import { fetchProducts } from "../../utils/fetchProducts";
+import { sanityClient, urlFor } from "../../sanity"
+import { groq } from "next-sanity";
+
+interface Props {
+    product: Product;
+  }
+
+export default function productScreen({product}: Props) {
+    // const { slug } = products;
+    console.log(product)
+    
+    return (
+        <div>
+            sss
+        </div>
+    )
+}
+
+export const getStaticPaths = async () => {
+    const query = groq`*[_type == "product"] {
+        _id,
+        slug {
+            current
+        }
+    }`;
+
+    const products = await sanityClient.fetch(query);
+
+    const paths = products.map((product: Product) => ({
+        params: {
+            slug: product.slug.current
+        }
+    }));
+
+    return {
+        paths,
+        fullback: 'blocking',
+    }
+};
+
+
+// Backend Code
+export const getServerSideProps: GetServerSideProps<Props> = async ({ params }) => {
+    const query = groq`*[_type == "product" && slug.current == "aqar-mnh"][0]  {
+        _id,
+        _createdAt,
+      bathrooms,
+      categoryTitle,
+      description,
+      price,
+      rooms,
+      images,
+      title
+    }
+    `
+
+    const product = await sanityClient.fetch(query, {
+        slug: params?.slug,
+    });
+
+    if(!product) {
+        return {
+            notFound: true
+        }
+    }
+
+    return{
+      props: {
+        product,
+      },
+    }
+  }
+
+  useState in image slider video 
+    const [activeIndex , setActiveIndex] = useState(0)
+    const [index, setIndex] = useState(0)
+    const [index1, setIndex1] = useState(1)
+
+    const [transLeft, setTransLeft] = useState(false)
+    const [transRight, setTransRight] = useState(false)
+
+    useEffect(() => {
+
+      if(transRight){
+        setTimeout(() => {
+          setTransRight(false)
+        }, 800)
+      }
+
+      if(transLeft){
+        setTimeout(() => {
+          setTransLeft(false)
+          setIndex((index + 1) % product.images.length)
+          setIndex1((index1 + 1) % product.images.length)
+        }, 800)
+      }
+    }, [transLeft, transRight])
+
+    const handlePrev = () => {
+      setTransRight(true)
+      setTransLeft(false)
+
+      const nextIndex = index - 1;
+      const nextIndex1 = index1 - 1;
+
+      if (nextIndex < 0) {
+        setIndex(product.images.length - 1)
+      } else {
+        setIndex(nextIndex)
+      }
+
+      if(nextIndex1 < 0){
+        setIndex1(product.images.length - 1)
+      } else {
+        setIndex1(nextIndex1)
+      }
+    }
+
+
+
+    const handleNext = () => {
+      setTransLeft(true)
+      setTransRight(false)
+    }
+
+    const handleImgClick = (indexImgClick: number) => {
+      setActiveIndex(indexImgClick)
+
+      if(indexImgClick < index){
+        setIndex(indexImgClick)
+        setIndex1(indexImgClick + 1)
+        setTransRight(true)
+        setTransLeft(false)
+      } else {
+        setIndex((indexImgClick -1) % product.images.length)
+        setIndex1((indexImgClick) % product.images.length)
+        handleNext()
+      }
+    }
